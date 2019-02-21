@@ -24,3 +24,13 @@ Coming soon
 
 ## Next Steps
 Coming soon
+
+## Team Members
+ * Dylan Nielson
+ * Adam Thomas
+ * Thomas Frohwein
+ * Georgi Ivanov
+ * Tom Panning
+ * Rebecca Waugh
+ * Kat Small
+ * Anna Kondylis
