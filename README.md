@@ -20,10 +20,15 @@ Coming soon
 Coming soon
 
 ## How to Use
-Coming soon
+This repo expects the raw data from fast track as a series of `.json` files in `/abcdqc_data/mriqc/`and the release data in `/abcdqc_data/releases/1.1/`.
+
+1. df-from-raw
+2. munge_release_data
+3. kde-gen
 
 ## Next Steps
-Coming soon
+ * Develop main application that invokes the modules serially.
+ * Create a pip/python package
 
 ## Team Members
  * Dylan Nielson
