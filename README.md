@@ -26,6 +26,8 @@ This repo expects the raw data from fast track as a series of `.json` files in `
 2. munge_release_data
 3. kde-gen
 
+This process creates a set of `.json` files in `/abcdqc_data/batchserver/output/` that contain KDEs and statistics for boxplots for all permutations of selectors to subset the data to be used by the webserver.
+
 ## Next Steps
  * Develop main application that invokes the modules serially.
  * Create a pip/python package
