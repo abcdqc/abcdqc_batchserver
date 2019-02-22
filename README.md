@@ -13,15 +13,13 @@ The Adolescent Brain Cognitive Development (ABCD) study will track approximately
 In partnership with the NIMH Data Archive (NDA), the ABCD Study releases fast-track data every month since June 2017. The fast-track data contains unprocessed neuroimaging data and rudimentary demographics. Processed and anonymized data including all the assessment criteria are released to the research community annually.
 
 ## Project Description
-This project uses both the ABCD fast-track data and the available ABCD annual releases (currently Release 1.1), creates a uniformly bid-formatted release of the data, and runs the data through the MRI Quality Control (MRIQC) tool using the NIH High Performance Compute (HPC) Cluster. MRIQC calculates a variety of image-quality metrics (IQMs) and generates a summary JSON file per subject. On the project's batch server, this data is put into a unified table and sorted by selected variables (including age, sex, drug abuse risk, manual QC score, task type and run number, manufacturer and model, and the IQMs). To preserve subject confidentiality, no identifying information is tranferred from the batch server to the webserver. Instead, Kernel Density Estimates (KDEs) for each combination of variables are calculated and converted into JSONs. On the webserver, these JSONs are converted to interactive violin plots. These interactive visualizations of the QC results are available at [http://abcdqc.org]. Data can be sorted and viewed at different levels to compare different IQMs. 
+This project uses both the ABCD fast-track data and the available ABCD annual releases (currently Release 1.1), creates a uniformly bid-formatted release of the data, and runs the data through the MRI Quality Control (MRIQC) tool using the NIH High Performance Compute (HPC) Cluster. MRIQC calculates a variety of image-quality metrics (IQMs) and generates a summary JSON file per subject. On the project's batch server, this data is put into a unified table and sorted by selected variables (including age, sex, drug abuse risk, manual QC score, task type and run number, manufacturer and model, and the IQMs). To preserve participant confidentiality, no identifying information is tranferred from the batch server to the webserver. Instead, Kernel Density Estimates (KDEs) for each combination of variables are calculated and converted into JSONs. On the webserver, these JSONs are converted to interactive violin plots. These interactive visualizations of the QC results are available at [http://abcdqc.org]. Data can be sorted and viewed at different levels to compare different IQMs. 
 
 ## Workflow
 ![ABCDQC Project Schematic](https://raw.githubusercontent.com/abcdqc/abcdqc_batchserver/bd637699f54891a2556c20f1a52cda67324811ad/ABCDQCflowchart.png "Project Schematic")
 
 ## Purpose
-This project allows the user to 
-
-Potential applications include making comparisons by scanner manufacturer or model, analyzing the impact of age, sex, and other variables on iamge quality, comparing the ABCD Study’s IQMs to the IQMs of other publically available datasets, and creating a predictive model for future datasets. 
+This project allows the user to visually compare and analyze the ABCD data while protecting participant confidentiality. There are many potential applications for this tool, including making comparisons by scanner manufacturer or model, analyzing the impact of age, sex, and other variables on iamge quality, comparing the ABCD Study’s IQMs to the IQMs of other publically available datasets, and creating a predictive model for future datasets. 
 
 ## Installation 
 Coming soon
@@ -41,9 +39,9 @@ This process creates a set of `.json` files in `/abcdqc_data/batchserver/output/
  
 ## Relevant Resources 
  * [Initial Project Presentation (February 22, 2019)](https://docs.google.com/presentation/d/1SSinOI-IDNTdZreTARghN799z-Oi2Bn-H6-xFGCnIVc/edit?usp=sharing)
- * 
- *
- *
+ * [MRIQC Documentation](https://mriqc.readthedocs.io/en/stable/)
+ * [ABCD Study Publications](https://abcdstudy.org/scientists-publications.html)
+ * [ABCD Study Website](https://abcdstudy.org/index.html)
 
 ## Team Members
  * Dylan Nielson
