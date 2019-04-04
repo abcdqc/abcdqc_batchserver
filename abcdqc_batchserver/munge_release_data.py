@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
-
 from pathlib import Path
 import pandas as pd
 
@@ -13,15 +7,7 @@ def load_abcd_table(path):
     labels = labels.T.reset_index().rename(columns={'index':'name', 0:'doc'})
     return table, labels
 
-
-# In[2]:
-
-
 release_dir = Path('/abcdqc_data/releases/1.1/ABCDstudyDEAP')
-
-
-# In[3]:
-
 
 # get the list of subjects in the most recent release
 # We're assuming that all subjects are in the site table
@@ -30,32 +16,16 @@ site_df = pd.read_csv(release_dir / 'abcd_lt01.txt',
                       header = 0,
                       sep='\t')
 
-
-# In[4]:
-
-
 site_df['bids_meta__subject_id'] = site_df.subjectkey.str.replace('_','')
-
-
-# In[5]:
-
 
 json_dat = pd.read_csv('/abcdqc_data/batchserver/output/df.csv')
 json_dat.columns = json_dat.columns.str.replace('.', '__')
-
-
-# In[6]:
-
 
 to_merge = site_df.loc[:,['interview_age', 'gender', 'bids_meta__subject_id']]
 mriqc_merge = json_dat.merge(to_merge, how='left', on='bids_meta__subject_id', indicator=True)
 assert mriqc_merge.groupby('_merge').provenance__md5sum.count()['right_only'] == 0
 assert mriqc_merge.groupby('_merge').provenance__md5sum.count()['both'] != 0
 assert mriqc_merge.groupby('_merge').provenance__md5sum.count()['left_only'] != 0
-
-
-# In[7]:
-
 
 # Get the FreesurferQC
 fsqc, fsqclbl = load_abcd_table(release_dir / 'freesqc01.txt')
@@ -65,10 +35,6 @@ midbeh, _ = load_abcd_table(release_dir / 'abcd_mid02.txt')
 nbbeh, _ = load_abcd_table(release_dir / 'abcd_mrinback02.txt')
 sstbeh, _ = load_abcd_table(release_dir / 'abcd_sst02.txt')
 mrfind, _ = load_abcd_table(release_dir / 'abcd_mrfindings01.txt')
-
-
-# In[8]:
-
 
 image_tbls = ["abcd_smrip101", "abcd_smrip201", "abcd_dti_p101", "abcd_dti_p201",
  "mri_rsi_p102", "mri_rsi_p202", "abcd_midr1bwp101", "abcd_midr1bwp201",
@@ -90,10 +56,6 @@ for itn in deskiab_tbls:
     imglbl['source_file'] = itn
     imgtbls[itn] = imgtbl
     imglbls.append(imglbl)
-
-
-# In[9]:
-
 
 longtbl = fsqc
 
@@ -199,47 +161,19 @@ longtbl = longtbl.merge(con.loc[:, ['subjectkey', 'interview_date', 'eventname',
 assert longtbl.groupby('_merge')['collection_id'].count()['both'] == len(longtbl)
 longtbl.drop('_merge', axis=1, inplace=True)
 
-
-# In[10]:
-
-
 longtbl['mr_findings_ok'] = (longtbl['mrif_score'] < 3)  & (longtbl['mrif_hydrocephalus'] == 'no') &  (longtbl['mrif_herniation'] == 'no')
-
-
-# In[11]:
-
 
 # Default everyting to qc_ok as False
 longtbl['qc_ok'] = False
 
-
-# In[12]:
-
-
 longtbl['bids_meta__subject_id'] = longtbl.subjectkey.str.replace('_','')
-
-
-# In[13]:
-
 
 mriqc_long = mriqc_merge.merge(longtbl, how='left', on='bids_meta__subject_id', indicator='long_merge')
 assert mriqc_long.shape[0] == mriqc_long.shape[0]
 
-
-# In[14]:
-
-
 mriqc_long.groupby('long_merge').provenance__md5sum.count()
 
-
-# In[15]:
-
-
 mriqc_long.bids_meta__modality.unique()
-
-
-# In[16]:
-
 
 # QC qualifications for smri
 
@@ -253,10 +187,6 @@ mriqc_long.loc[((mriqc_long.bids_meta__modality == 'T1w')
 
 mriqc_long.loc[((mriqc_long.bids_meta__modality == 'T2w') 
               & (mriqc_long.fsqc_qc == 1)), 'qc_ok'] = True
-
-
-# In[17]:
-
 
 # QC for MID task
 mriqc_long.loc[((mriqc_long.bids_meta__modality == 'bold') 
@@ -290,30 +220,14 @@ mriqc_long.loc[((mriqc_long.bids_meta__modality == 'bold')
              & (mriqc_long.bids_meta__TaskName == 'rest')
              & (mriqc_long['rsfmri_cor_network.gordon_ntpoints'] > 375)), 'qc_ok'] = True
 
-
-# In[20]:
-
-
 mriqc_all = mriqc_merge.merge(mriqc_long.loc[:,['provenance__md5sum', 'qc_ok']], on='provenance__md5sum', indicator='all_merge')
 assert mriqc_all.groupby('all_merge').provenance__md5sum.count()['right_only'] == 0
 assert mriqc_all.groupby('all_merge').provenance__md5sum.count()['both'] != 0
 assert mriqc_all.groupby('all_merge').provenance__md5sum.count()['left_only'] == 0
 
-
-# In[21]:
-
-
 mriqc_all.drop(['_merge', 'all_merge'], axis=1)
 
-
-# In[23]:
-
-
 mriqc_all.to_csv('/abcdqc_data/batchserver/output/df_plus_meta.csv', index=False)
-
-
-# In[24]:
-
 
 iqms = [ 'cjv', 'cnr', 'efc', 'fber', 'fwhm_avg', 'fwhm_x', 'fwhm_y', 'fwhm_z', 'icvs_csf', 'icvs_gm', 'icvs_wm', 'inu_med', 'inu_range',
       'qi_1', 'qi_2', 'rpve_csf', 'rpve_gm', 'rpve_wm', 'size_x', 'size_y', 'size_z', 'snr_csf', 'snr_gm',
@@ -325,20 +239,12 @@ iqms = [ 'cjv', 'cnr', 'efc', 'fber', 'fwhm_avg', 'fwhm_x', 'fwhm_y', 'fwhm_z', 
       'summary_wm_mad', 'summary_wm_mean', 'summary_wm_median', 'summary_wm_n', 'summary_wm_p05', 'summary_wm_p95',
       'summary_wm_stdv', 'tpm_overlap_csf', 'tpm_overlap_gm', 'tpm_overlap_wm', 'wm2max' ]
 
-
-# In[44]:
-
-
 t1_iqms = (mriqc_all.query('bids_meta__modality == "T1w"').describe().sum(0) != 0)
 #t1_iqms.index[t1_iqms]
 t2_iqms = (mriqc_all.query('bids_meta__modality == "T2w"').describe().sum(0) != 0)
 #t2_iqms.index[t2_iqms]
 bold_iqms = (mriqc_all.query('bids_meta__modality == "bold"').describe().sum(0) != 0)
 bold_iqms.index[bold_iqms]
-
-
-# In[ ]:
-
 
 t1wiqms = ['cjv', 'cnr', 'efc', 'fber', 'fwhm_avg',
        'fwhm_x', 'fwhm_y', 'fwhm_z', 'icvs_csf', 'icvs_gm', 'icvs_wm',
@@ -384,4 +290,3 @@ boldiqms = ['dummy_trs', 'dvars_nstd',
        'summary_bg_stdv', 'summary_fg_k', 'summary_fg_mad', 'summary_fg_mean',
        'summary_fg_median', 'summary_fg_n', 'summary_fg_p05', 'summary_fg_p95',
        'summary_fg_stdv', 'tsnr']
-

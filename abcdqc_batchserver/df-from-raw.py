@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[3]:
-
-
 import pandas as pd
 import os
 import re
@@ -11,19 +5,11 @@ import json
 import time
 import unittest
 
-
-# In[4]:
-
-
 jsonList = []
 for root, dirs, files in os.walk("/abcdqc_data/mriqc/"):
     for filename in files:
         if re.match(".*json$", filename) is not None:
             jsonList.append(root + '/' + filename)
-
-
-# In[5]:
-
 
 # https://stackoverflow.com/questions/52782024/reading-dictionary-stored-on-text-file-and-convert-to-pandas-dataframe
 def readjson(file):
@@ -31,10 +17,6 @@ def readjson(file):
         jsonstr = json.load(f)
 
     return(pd.io.json.json_normalize(jsonstr))
-
-
-# In[15]:
-
 
 count = 1
 json_list = []
@@ -50,17 +32,9 @@ for ji, file in enumerate(jsonList):
     json_list.append(readjson(file))
 df = df.append(pd.concat(json_list, sort=True, ignore_index=True, copy=False), ignore_index=True)
 
-
-# In[16]:
-
-
 df.to_csv('/abcdqc_data/batchserver/output/df.csv', index=False)
 
-
-# ## Testing Framework
-
-# In[25]:
-
+## Testing Framework
 
 # readjson
 def readjson_test():
@@ -101,16 +75,5 @@ def readjson_test():
     print(col_t)
     #assert dat.columns.values == col_t
 
-
-# In[26]:
-
-
 # uncomment below to run tests
 readjson_test()
-
-
-# In[ ]:
-
-
-
-

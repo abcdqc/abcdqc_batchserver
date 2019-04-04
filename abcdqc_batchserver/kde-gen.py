@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[29]:
-
-
 import pandas as pd
 import json
 from scipy.stats import norm
@@ -14,17 +8,9 @@ import statsmodels.api as sm
 import time
 from itertools import product
 
-
-# In[30]:
-
-
 # load data frame from csv
 df = pd.read_csv("/abcdqc_data/batchserver/output/df.csv")
 df.columns = df.columns.str.replace('.', '__')
-
-
-# In[31]:
-
 
 # generate summary measures for all iqms
 t1wiqms = ['cjv', 'cnr', 'efc', 'fber', 'fwhm_avg',
@@ -72,16 +58,8 @@ boldiqms = ['dummy_trs', 'dvars_nstd',
 
 mod_dict = {'T1w': t1wiqms, 'T2w': t2wiqms, 'bold': boldiqms}
 
-
-# In[32]:
-
-
 splitvars = [ 'bids_meta__Manufacturer', 'bids_meta__ManufacturersModelName', 'bids_meta__TaskName', 'qc_ok', 'gender']
 split_uniques = [list(df[sv].unique()) + ['all'] for sv in splitvars]
-
-
-# In[69]:
-
 
 def kdegen(dataframe, x_list): 
     # returns x and y as tuples
@@ -103,10 +81,6 @@ def kdetuples(dataframe, iqms):
         kdedict['n_subs'] = int(dataframe.bids_meta__subject_id.nunique())
         kdedict['n_scans'] = int(dataframe.provenance__md5sum.nunique())
     return(kdedict)
-
-
-# In[ ]:
-
 
 def subsetdf(dataframe, varname, varval):
     return dataframe.loc[dataframe[varname] == varval]
@@ -148,11 +122,6 @@ for mrimode in df_mods:
             print('finished', end='', flush=True)
             print(f' {ci}', end=', ', flush=True)
     print(f"finished {mrimode}")
-            
-
-
-# In[34]:
-
 
 name_map = {'bids_meta__Manufacturer':'Manufacturer',
             'bids_meta__ManufacturersModelName': 'Model',
@@ -160,15 +129,7 @@ name_map = {'bids_meta__Manufacturer':'Manufacturer',
             'qc_ok':'QC',
             'gender':'Sex'}
 
-
-# In[61]:
-
-
 foo = kdetuples(subdf, mod_dict[mrimode])
-
-
-# In[33]:
-
 
 #     # use a dictionary to allow different variable names as mentioned here:
 #     # https://stackoverflow.com/questions/6181935/how-do-you-create-different-variable-names-while-in-a-loop
@@ -179,10 +140,6 @@ foo = kdetuples(subdf, mod_dict[mrimode])
 #     # iterate over all 3 subsets
 #     sv_iter(mode_df, mrimode)
 # print(time.time() - start_time, " seconds")
-
-
-# In[11]:
-
 
 splitvars = [ 'bids_meta__Manufacturer', 'bids_meta__ManufacturersModelName', 'bids_meta__modality', 'bids_meta__TaskName', 'qc_ok', 'gender']
 split_uniques = [list(df[sv].unique()) + ['all'] for sv in splitvars]
@@ -205,4 +162,3 @@ for uvs in combos:
     if len(subdf) >= 100:
         
     break
-
